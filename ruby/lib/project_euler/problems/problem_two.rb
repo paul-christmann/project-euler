@@ -1,4 +1,4 @@
-require 'project_euler/util/fibonacci.rb'
+require 'project_euler/util/fibonacci'
 module ProjectEuler
   module Problems
     class ProblemTwo

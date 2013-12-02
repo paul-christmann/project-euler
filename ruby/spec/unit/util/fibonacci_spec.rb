@@ -1,4 +1,4 @@
-require 'project_euler/util/fibonacci.rb'
+require 'project_euler/util/fibonacci'
 
 describe ProjectEuler::Util::Fibonacci do
   

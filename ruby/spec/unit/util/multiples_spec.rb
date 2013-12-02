@@ -1,4 +1,4 @@
-require 'project_euler/util/multiples.rb'
+require 'project_euler/util/multiples'
 
 describe ProjectEuler::Util::Multiples do
   

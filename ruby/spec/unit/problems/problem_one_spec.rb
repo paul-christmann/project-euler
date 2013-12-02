@@ -1,4 +1,4 @@
-require 'project_euler/problems/problem_one.rb'
+require 'project_euler/problems/problem_one'
 
 describe ProjectEuler do
   describe 'problem one' do
