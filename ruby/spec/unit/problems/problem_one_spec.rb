@@ -8,7 +8,7 @@ describe ProjectEuler do
     end
     it 'should calculate answer' do
       p1 = ProjectEuler::Problems::ProblemOne.new(3, 5, 1000)
-      puts "Answer is #{p1.sum}"
+      p1.sum.should == 233168
     end
   end
 end
