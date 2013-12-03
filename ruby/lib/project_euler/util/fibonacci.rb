@@ -15,18 +15,39 @@ module ProjectEuler
       end
       
       def series
+        return [] unless valid?
         series = []
-        return series unless valid?
-        
         series << @first
-        series << @second
         
         while (!@count || @count > series.length ) do
-          next_value = series[series.length-1] + series[series.length-2]
+          if series.length == 1
+            next_value = @second
+          else
+            next_value = series[series.length-1] + series[series.length-2]
+          end
           break if @maximum && next_value > @maximum
           series << next_value
         end
         series
+      end
+      
+      def fibonacci
+        if @count
+          self.fib2(@count)
+        else
+          series.last
+        end
+      end
+      
+      def self.fibonacci(n)
+        Fibonacci.new(:count => n).fibonacci
+      end
+
+      protected      
+      def fib2(n)
+        return @first if n <= 0
+        return @second if n == 1
+        return self.fib2(n-1) + self.fib2(n-2)
       end
     end
   end
