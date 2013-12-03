@@ -13,24 +13,23 @@ module ProjectEuler
         factors << 1
         factors << self.number
         
-        max_to_test = self.number
-        found_one = true
-        while found_one
-          found_one = false
-          for i in 2..Math::sqrt(max_to_test).to_i
-            if ( max_to_test % i == 0 )
-              factors << i
-              max_to_test = (max_to_test/i)
-              factors << max_to_test
-              found_one = true
-              break
-            end
-          end
+        number_to_factor = self.number
+        while factor = find_factor(number_to_factor)
+          factors << factor
+          factors << (number_to_factor = (number_to_factor/factor))
         end
         factors.uniq.sort
       end
       def is_prime?
         factors.length < 3
+      end
+      
+      protected
+      def find_factor(n)
+        for i in 2..Math::sqrt(n).to_i
+          return i if n % i == 0
+        end
+        nil
       end
     end
   end
