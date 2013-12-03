@@ -1,3 +1,21 @@
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:spec)
 task :default => :spec
+
+require './lib/hashes/hashes'
+namespace :hashes do
+  task :add, [:message, :key] do |t, args|
+    h = ProjectEuler::Hashes.new
+    salt = h.add_message(args[:key], args[:message])
+    puts "Encrypted with salt (#{salt})"
+  end
+  task :get, [:key, :salt] do |t, args|
+    h = ProjectEuler::Hashes.new
+    message = h.get_message(args[:key], args[:salt])
+    puts "Found #{message}"
+  end
+  task :remove, [:key, :salt] do |t, args|
+    h = ProjectEuler::Hashes.new
+    h.remove_message(args[:key])
+  end
+end
