@@ -9,10 +9,22 @@ module ProjectEuler
       def factors
         factors = []
         return factors if self.number <= 0
-        for i in 1..Math::sqrt(self.number).to_i
-          if ( number % i == 0 )
-            factors << i
-            factors << (number / i)
+        
+        factors << 1
+        factors << self.number
+        
+        max_to_test = self.number
+        found_one = true
+        while found_one
+          found_one = false
+          for i in 2..Math::sqrt(max_to_test).to_i
+            if ( max_to_test % i == 0 )
+              factors << i
+              max_to_test = (max_to_test/i)
+              factors << max_to_test
+              found_one = true
+              break
+            end
           end
         end
         factors.uniq.sort
