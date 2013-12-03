@@ -1,11 +1,7 @@
 module ProjectEuler
   module Util
-    class Factors
-      attr_accessor :number
-      def initialize(options={})
-        self.number = options[:number].to_i
-        self.number = 0 if self.number < 0
-      end
+    module Factors
+      
       def factors
         factors = []
         return factors if self.number <= 0
@@ -20,6 +16,7 @@ module ProjectEuler
         end
         factors.uniq.sort
       end
+      
       def is_prime?
         factors.length < 3
       end

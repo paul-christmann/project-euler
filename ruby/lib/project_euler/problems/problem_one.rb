@@ -3,12 +3,13 @@ include ProjectEuler::Util
 module ProjectEuler
   module Problems
     class ProblemOne
-      def initialize (factor1, factor2, maximum)
-        @m1 = Multiples.new(:factor => factor1, :maximum => maximum)
-        @m2 = Multiples.new(:factor => factor2, :maximum => maximum)
+      def initialize (number1, number2, maximum)
+        @maximum = maximum
+        @n1 = Number.new(:number => number1)
+        @n2 = Number.new(:number => number2)
       end
       def sum
-        (@m1.factors + @m2.factors).sort.uniq.inject(:+)
+        (@n1.multiples(@maximum) + @n2.multiples(@maximum)).sort.uniq.inject(:+)
       end
     end
   end

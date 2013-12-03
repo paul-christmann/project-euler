@@ -5,33 +5,32 @@ describe Multiples do
   
   describe 'calculate multiples' do
     it 'should initialize values' do
-      m = Multiples.new(:factor => 3, :maximum => 10)
-      m.factor.should == 3
-      m.maximum.should == 10
+      m = Number.new(:number => 3,)
+      m.number.should == 3
     end
     it 'should find multiples of 3' do
-      m = Multiples.new(:factor => 3, :maximum => 10)
-      m.factors.length.should == 3
+      m = Number.new(:number => 3)
+      m.multiples(10).length.should == 3
     end
     it 'should find multiples of 5' do
-      m = Multiples.new(:factor => 5, :maximum => 11)
-      m.factors.length.should == 2
-      m.factors[0].should == 5
-      m.factors[1].should == 10
+      m = Number.new(:number => 5)
+      multiples = m.multiples(11)
+      multiples.length.should == 2
+      multiples[0].should == 5
+      multiples[1].should == 10
     end
     it 'should ingnore boundary' do
-      m = Multiples.new(:factor => 5, :maximum => 10)
-      m.factors.length.should == 1
-      m.factors[0].should == 5
+      m = Number.new(:number => 5)
+      multiples = m.multiples(10)
+      multiples.length.should == 1
+      multiples[0].should == 5
     end
     it 'should match boundary' do
-      m = Multiples.new(:factor => 5, :maximum => 10, :include_maximum => true)
-      m.factors.length.should == 2
-      m.factors[0].should == 5
-      m.factors[1].should == 10
-    end
-    it 'should find multiples of 3 as static' do
-      Multiples.get_factors(:factor => 3, :maximum => 10).length.should == 3
+      m = Number.new(:number => 5)
+      multiples = m.multiples(10, :include_maximum => true)
+      multiples.length.should == 2
+      multiples[0].should == 5
+      multiples[1].should == 10
     end
   end
 end

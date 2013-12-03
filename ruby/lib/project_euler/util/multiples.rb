@@ -1,25 +1,16 @@
 module ProjectEuler
   module Util
-    class Multiples
-      attr_reader :factor, :maximum, :include_maximum
-      def initialize(options)
-        @factor = options[:factor] || 1
-        @maximum = options[:maximum] || 1
-        @include_maximum = options[:include_maximum]
-      end
+    module Multiples
       
-      def factors
-        factors = []
-        next_factor = factor
-        while ((@include_maximum && next_factor <= maximum) || (!@include_maximum && next_factor < maximum) )
-          factors << next_factor
-          next_factor += factor
+      def multiples(maximum, options = {})
+        include_maximum = options[:include_maximum]
+        multiples = []
+        next_multiple = number
+        while ((include_maximum && next_multiple <= maximum) || (!include_maximum && next_multiple < maximum) )
+          multiples << next_multiple
+          next_multiple += number
         end
-        factors
-      end
-      
-      def self.get_factors(options)
-        Multiples.new(options).factors
+        multiples
       end
     end
   end
