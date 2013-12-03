@@ -2,6 +2,10 @@ require 'project_euler/util/number'
 
 include ProjectEuler::Util
 
+class FactorsTest < BaseNumber
+  include Factors
+end
+
 describe Factors do
   describe 'calculate prime' do
     it 'should know prime' do
@@ -22,14 +26,14 @@ describe Factors do
       Number.new(:number => -1).number.should == 0
     end
     it 'should get factors for prime' do
-      f = Number.new(:number=>3)
+      f = FactorsTest.new(:number=>3)
       f.factors.length.should == 2
       f.factors[0].should == 1
       f.factors[1].should == 3
       f.is_prime?.should be_true
     end
     it 'should get factors' do
-      f = Number.new(:number=>6)
+      f = FactorsTest.new(:number=>6)
       f.factors.length.should == 4
       f.factors[0].should == 1
       f.factors[1].should == 2
@@ -38,14 +42,14 @@ describe Factors do
       f.is_prime?.should be_false
     end
     it 'should get factors for square' do
-      f = Number.new(:number=>9)
+      f = FactorsTest.new(:number=>9)
       f.factors.length.should == 3
       f.factors[0].should == 1
       f.factors[1].should == 3
       f.factors[2].should == 9
     end
     it 'should get factors for edgecase' do
-      f = Number.new(:number=>1)
+      f = FactorsTest.new(:number=>1)
       f.factors.length.should == 1
       f.factors[0].should == 1
     end
