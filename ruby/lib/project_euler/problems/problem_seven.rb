@@ -10,17 +10,23 @@ module ProjectEuler
 
       def primes
         return [] if @number <= 0
-        primes2
+        primes1
       end
 
       protected
       def primes1
         primes = []
+        
+        squares_hash = {}
         return primes if @number <= 0
         
         prime_candidate = 2
         while true
-          primes << prime_candidate unless primes.detect{|p| prime_candidate % p == 0}
+          sqr_candidate = Math.sqrt(prime_candidate).to_i
+          prime_factor = primes.each.detect do |p|
+            p <= sqr_candidate && prime_candidate % p == 0
+          end
+          primes << prime_candidate unless prime_factor
           break if primes.size == @number
           prime_candidate = prime_candidate + 1
         end
