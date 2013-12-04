@@ -6,6 +6,9 @@ module ProjectEuler
         self.number = options[:number].to_i
         self.number = 0 if self.number < 0
       end
+      def to_s 
+        "#{self.number}"
+      end
     end
     class Number < BaseNumber
       include ProjectEuler::Util::Factors
