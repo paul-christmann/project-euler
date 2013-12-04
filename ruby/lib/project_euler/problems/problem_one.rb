@@ -5,8 +5,8 @@ module ProjectEuler
     class ProblemOne
       def initialize (number1, number2, maximum)
         @maximum = maximum
-        @n1 = Number.new(:number => number1)
-        @n2 = Number.new(:number => number2)
+        @n1 = Number.new(number1)
+        @n2 = Number.new(number2)
       end
       def sum
         (@n1.multiples(@maximum) + @n2.multiples(@maximum)).sort.uniq.inject(:+)

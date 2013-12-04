@@ -12,7 +12,7 @@ module ProjectEuler
       def smallest_multiple
         overall_primes = {}
         @numbers.each do |n|
-          Number.new(:number => n).prime_factors.each do |factor, quantity|
+          Number.new(n).prime_factors.each do |factor, quantity|
             overall_primes[factor] = [overall_primes[factor].to_i, quantity].max
           end
         end

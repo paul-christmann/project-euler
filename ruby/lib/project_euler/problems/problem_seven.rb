@@ -25,7 +25,7 @@ module ProjectEuler
       def next_prime(i)
         while true
           i = i+1
-          return i if Number.new(:number => i).is_prime?
+          return i if Number.new(i).is_prime?
         end
       end
     end
