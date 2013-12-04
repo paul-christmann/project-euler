@@ -9,19 +9,35 @@ module ProjectEuler
       end
 
       def primes
+        return [] if @number <= 0
+        primes2
+      end
+
+      protected
+      def primes1
         primes = []
         return primes if @number <= 0
         
-        last_prime = 1
-        while prime = next_prime(last_prime)
-          primes << prime
+        prime_candidate = 2
+        while true
+          primes << prime_candidate unless primes.detect{|p| prime_candidate % p == 0}
           break if primes.size == @number
-          last_prime = prime
+          prime_candidate = prime_candidate + 1
         end
         primes
       end
       
-      protected
+      def primes2
+        primes = []
+        last_prime = 1
+        while prime_candidate = next_prime(last_prime)
+          primes << prime_candidate
+          break if primes.size == @number
+          last_prime = prime_candidate
+        end
+        primes
+      end
+      
       def next_prime(i)
         while true
           i = i+1
