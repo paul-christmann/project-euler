@@ -1,4 +1,4 @@
-require 'project_euler/problems/problem_eight'
+require 'project_euler/problems/problem_8'
 include ProjectEuler::Problems
 
 describe ProblemEight do
