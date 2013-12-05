@@ -1,10 +1,11 @@
 module ProjectEuler
   module Util
     class Fibonacci
-      attr_reader :count, :maximum, :first, :second
+      attr_reader :count, :maximum, :first, :second, :exceed_max
       def initialize(options)
         @count = options[:count]
         @maximum = @count ? nil : options[:maximum]
+        @exceed_max = @maximum && options[:exceed_max]
         
         @first = (options[:first] || 0).to_i
         @second = (options[:second] || 1).to_i
@@ -25,7 +26,10 @@ module ProjectEuler
           else
             next_value = series[series.length-1] + series[series.length-2]
           end
-          break if @maximum && next_value > @maximum
+          if @maximum && next_value > @maximum
+            series << next_value if @exceed_max
+            break
+          end
           series << next_value
         end
         series
