@@ -5,10 +5,11 @@ require 'project_euler/util/primes'
 module ProjectEuler
   module Util
     class BaseNumber
-      attr_accessor :number
+      attr_accessor :number, :options
       def initialize(number, options = {})
         self.number = number
         self.number = 0 if self.number < 0 && options[:prohibit_negative]
+        self.options = options.dup
       end
       def to_s 
         "#{self.number}"

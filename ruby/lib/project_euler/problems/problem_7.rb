@@ -9,7 +9,7 @@ module ProjectEuler
       end
 
       def primes
-        Number.new(@count).primes(Primes::COUNT)
+        Number.new(@count, :type => Primes::COUNT).primes
       end
 
     end

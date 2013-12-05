@@ -4,22 +4,26 @@ module ProjectEuler
       
       MAX_VALUE = 0
       COUNT = 1
-      def primes(type)
+      
+      def primes
         return [] if self.number <= 0
-        type == MAX_VALUE ? Primes.do_prime_sieve(self.number) : primes1
+
+        increment = (options[:type] == COUNT ? 10*self.number : self.number)
+        primes = Primes.do_prime_sieve(increment)
+        
+        if ( options[:type] == COUNT ) 
+          while primes.size < self.number
+            increment += increment
+            primes = Primes.do_prime_sieve(increment)
+          end
+          primes = primes.slice(0,self.number)
+        end
+        
+        primes
       end
       
       protected
       
-      def primes1
-        primes = []
-        increment = 10*self.number
-        while (primes = Primes.do_prime_sieve(increment)).size < self.number
-          increment += increment
-        end
-        primes.slice(0,self.number)
-      end
-
       def Primes.do_prime_sieve(end_val)
         
         primes = []
