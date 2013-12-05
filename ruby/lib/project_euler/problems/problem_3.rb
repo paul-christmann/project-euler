@@ -1,4 +1,3 @@
-require 'project_euler/util/factors'
 include ProjectEuler::Util
 module ProjectEuler
   module Problems

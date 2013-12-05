@@ -1,3 +1,7 @@
+require 'project_euler/util/factors'
+require 'project_euler/util/multiples'
+require 'project_euler/util/primes'
+
 module ProjectEuler
   module Util
     class BaseNumber
@@ -13,6 +17,10 @@ module ProjectEuler
     class Number < BaseNumber
       include ProjectEuler::Util::Factors
       include ProjectEuler::Util::Multiples
+      include ProjectEuler::Util::Primes
+      def self.is_prime?(n)
+        Number.new(n).is_prime?
+      end
     end
   end
 end

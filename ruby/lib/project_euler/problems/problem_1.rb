@@ -1,4 +1,4 @@
-require 'project_euler/util/multiples'
+require 'project_euler/util/number'
 include ProjectEuler::Util
 module ProjectEuler
   module Problems

@@ -7,15 +7,7 @@ class FactorsTest < BaseNumber
 end
 
 describe Factors do
-  describe 'calculate prime' do
-    it 'should know prime' do
-      Number.new(17).is_prime?.should be_true
-    end
-    it 'should know not prime' do
-      Number.new(18).is_prime?.should be_false
-    end
-  end
-  describe 'calculate factors' do
+  describe 'numbers initialization' do
     it 'should set value' do
       Number.new(3).number.should == 3
     end
@@ -25,6 +17,16 @@ describe Factors do
     it 'should set value to zero when negative' do
       Number.new(-1, {:prohibit_negative => true}).number.should == 0
     end
+  end
+  describe 'calculate prime' do
+    it 'should know prime' do
+      FactorsTest.new(17).is_prime?.should be_true
+    end
+    it 'should know not prime' do
+      FactorsTest.new(18).is_prime?.should be_false
+    end
+  end
+  describe 'calculate factors' do
     it 'should get factors for prime' do
       f = FactorsTest.new(3)
       f.factors.length.should == 2
