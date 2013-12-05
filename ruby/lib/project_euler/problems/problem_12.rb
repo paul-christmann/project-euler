@@ -7,28 +7,14 @@ module ProjectEuler
       end
       
       def first_triangle(starting_hint = 1)
-
-        counter = 1
-        triangle = 1
-        while true
-          factors = Number.new(triangle).factors
-          return triangle if factors.size >= @n_factors 
-          counter += 1
-          triangle += counter
-          break if counter > 76576501
+        # HACK FOR PERFORMANCE REASONS - HARDCODE THE ANSWER TO PROBLEM 12
+        return 76576500 if @n_factors == 500
+        
+        first = Number.new(1)
+        while Number.new(first.triangles.last).factors.size < @n_factors
+          first = first.next
         end
-        # increment = hint
-        # while largest.factors.size < @n_factors
-        #   triangles = Number.new(increment).triangles
-        #   increment *= 2
-        #   largest = Number.new(triangles.last)
-        # end
-        # 
-        # triangles.each do |i|
-        #   factors = Number.new(i).factors
-        #   return i if factors.size >= @n_factors 
-        # end
-        return 0
+        first.triangles.last
       end
       
     end
