@@ -8,11 +8,9 @@ module ProjectEuler
       def pythagorean_product(sum)
         (1..sum).each do |a|
           (a..sum).each do |b|
-            (b..sum).each do |c|
-              next unless a+b+c == sum
-              next unless a*a + b*b == c*c
-              return a*b*c
-            end
+            c = sum - a - b
+            next unless a*a + b*b == c*c
+            return a*b*c
           end
         end
         0
