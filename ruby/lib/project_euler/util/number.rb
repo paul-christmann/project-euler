@@ -1,6 +1,7 @@
 require 'project_euler/util/factors'
 require 'project_euler/util/multiples'
 require 'project_euler/util/primes'
+require 'project_euler/util/triangles'
 
 module ProjectEuler
   module Util
@@ -19,6 +20,7 @@ module ProjectEuler
       include ProjectEuler::Util::Factors
       include ProjectEuler::Util::Multiples
       include ProjectEuler::Util::Primes
+      include ProjectEuler::Util::Triangles
       def self.is_prime?(n)
         Number.new(n).is_prime?
       end
