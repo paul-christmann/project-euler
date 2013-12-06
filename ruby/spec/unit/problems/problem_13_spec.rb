@@ -8,6 +8,10 @@ describe 'Problem13' do
       
       result.to_s[0..9].should == "5537376230"
     end
+    it 'should solve truncating' do
+      result = LARGE_NUMBER_ARRAY.map{|i| i.to_s[0..15].to_i}.inject(:+)
+      result.to_s[0..9].should == "5537376230"
+    end
   end
 end
 
