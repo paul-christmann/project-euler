@@ -1,14 +1,16 @@
 module ProjectEuler
   module Problems
     class Problem14
+      attr_accessor :calculations
       def initialize
+        @calculations  = 0
       end
       
       def longest_chain(max_int)
         chains = {}
         
         longest_chain = []
-        (2..max_int).each do |i|
+        [*2..max_int].reverse.each do |i|
           chain = chain(i, chains)
           longest_chain = chain if chain.length > longest_chain.length
         end
@@ -29,7 +31,7 @@ module ProjectEuler
         end
         chain << 1 unless chain.last == 1
         chain.each_with_index do |i, index|
-          next if chain_hash[i]
+          break if chain_hash[i]
           subchain = chain[index, chain.length-1]
           chain_hash[i] = subchain
         end
@@ -38,7 +40,9 @@ module ProjectEuler
       
       protected
       def next_int(n)
-        if n % 2 == 0
+        @calculations += 1
+        if n & 1 == 0
+        # if n % 2 == 0
           n / 2
         else
           3 * n + 1
