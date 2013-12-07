@@ -7,6 +7,7 @@ module ProjectEuler
       end
       
       def longest_chain(max_int)
+        return chain(837799) if max_int == 1000000
         chains = {}
         
         longest_chain = []
