@@ -1,3 +1,4 @@
+require 'project_euler/problems/problem_13'
 include ProjectEuler::Problems
 
 describe 'Problem13' do
@@ -5,16 +6,20 @@ describe 'Problem13' do
     it 'should solve' do
       result = LARGE_NUMBER_ARRAY.inject(:+)
       result.should == 5537376230390876637302048746832985971773659831892672
-      
       result.to_s[0..9].should == "5537376230"
     end
     it 'should solve truncating' do
       result = LARGE_NUMBER_ARRAY.map{|i| i.to_s[0..15].to_i}.inject(:+)
       result.to_s[0..9].should == "5537376230"
     end
+    it 'should solve with small digit hack' do
+      string_array = LARGE_NUMBER_ARRAY.map{|i| i.to_s}
+      # What if we can only do single digit arithmetic?
+      p = Problem13.new(string_array)
+      p.sum.should == "5537376230390876637302048746832985971773659831892672"
+    end
   end
 end
-
 LARGE_NUMBER_ARRAY = [
   37107287533902102798797998220837590246510135740250,
   46376937677490009712648124896970078050417018260538,
