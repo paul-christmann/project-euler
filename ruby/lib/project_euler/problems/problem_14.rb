@@ -7,6 +7,7 @@ module ProjectEuler
       end
       
       def longest_chain(max_int)
+        # Problem 14 Hackery for speed of run
         return chain(837799) if max_int == 1000000
         chains = {}
         
