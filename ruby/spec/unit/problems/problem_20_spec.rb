@@ -3,7 +3,8 @@ include ProjectEuler::Problems
 describe 'Problem20' do
   describe 'problem 20' do
     def sum_digits(i)
-      i.to_s.split('').inject(0){|r, k| r = r + k.to_i}
+      return i if i < 10
+      (i % 10) + sum_digits(i/10)
     end
     it 'should solve baseline' do
       result = [*1..10].inject(1){|result, element| result = result * element}
