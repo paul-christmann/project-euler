@@ -4,7 +4,6 @@ module ProjectEuler
       
       def initialize (grid_size)
         @grid_size = grid_size+1
-        @route_cache = {}
         @count_cache = {}
       end
       
