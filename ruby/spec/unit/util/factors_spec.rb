@@ -88,4 +88,24 @@ describe Factors do
       pf[3].should == 1
     end
   end
+  describe 'should calculate abundancy' do
+    it 'should calculate perfect' do
+      n = FactorsTest.new(28)
+      n.is_perfect?.should == true
+      n.is_abundant?.should == false
+      n.is_deficient?.should == false
+    end
+    it 'should calculate abundant' do
+      n = FactorsTest.new(12)
+      n.is_abundant?.should == true
+      n.is_perfect?.should == false
+      n.is_deficient?.should == false
+    end
+    it 'should calculate deficient' do
+      n = FactorsTest.new(25)
+      n.is_deficient?.should == true
+      n.is_perfect?.should == false
+      n.is_abundant?.should == false
+    end
+  end
 end

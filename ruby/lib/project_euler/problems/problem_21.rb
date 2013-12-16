@@ -9,7 +9,7 @@ module ProjectEuler
         @amicable_sums = {}
         @amicable_pairs = []
         (1..@max).each do |i|
-          amicable_sum = Number.new(i).factors.inject(:+) - i
+          amicable_sum = Number.new(i).amicable_sum
           if @amicable_sums[amicable_sum] == i
             @amicable_pairs << [amicable_sum, i]
           end

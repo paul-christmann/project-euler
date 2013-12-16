@@ -35,6 +35,22 @@ module ProjectEuler
         factors.length < 3
       end
       
+      def is_perfect?
+        amicable_sum == self.number
+      end
+      
+      def is_abundant?
+        amicable_sum > self.number
+      end
+      
+      def is_deficient?
+        amicable_sum < self.number
+      end
+      
+      def amicable_sum 
+        factors.inject(:+) - self.number
+      end
+      
       protected
       def find_factor(n)
         for i in 2..Math::sqrt(n).to_i
