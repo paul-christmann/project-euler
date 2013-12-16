@@ -10,16 +10,17 @@ module ProjectEuler
             @abundants[i] = true 
           end
         end
-        keys = @abundants.keys
+        keys = @abundants.keys.sort
         keys.each do |i|
           keys.each do |j|
+            next if i + j > 28123
             @abundant_sums[i + j] = true
           end
         end
       end
       
       def abundant_sums
-        @abundant_sums
+        @abundant_sums.keys.sort
       end
       
       def non_abundant_sums

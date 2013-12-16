@@ -11,10 +11,9 @@ describe ProjectEuler do
     end
     describe 'should calculate answer' do
       it 'should caculate sums length' do
-        sums = @p.abundant_sums.keys
+        sums = @p.abundant_sums
         puts "#{sums.first} and #{sums.last}"
         sums.first.should == 24
-        sums.length.should == 53871
       end
       it 'should calculate answer' do
         sums = @p.non_abundant_sums
