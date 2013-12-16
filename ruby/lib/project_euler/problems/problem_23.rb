@@ -2,21 +2,23 @@ module ProjectEuler
   module Problems
     class Problem23
       def initialize
-        @abundants = {}
+        @abundants = []
         @abundant_sums = {}
         (1..28123).each do |i|
           n = Number.new(i)
           if n.is_abundant?
-            @abundants[i] = true 
+            @abundants << i
           end
         end
-        keys = @abundants.keys.sort
-        keys.each do |i|
-          keys.each do |j|
-            next if i + j > 28123
-            @abundant_sums[i + j] = true
+        
+        (0..@abundants.size-1).each do |i|
+          x = @abundants[i]
+          (0..i).each do |j|
+            y = @abundants[j]
+            @abundant_sums[x+y] = true
           end
         end
+        
       end
       
       def abundant_sums
