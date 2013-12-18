@@ -5,22 +5,19 @@ module ProjectEuler
         @num_digits = [1,[10,digits.to_i].min].max
       end
       
-      def base_sequence
-        [*0..@num_digits-1].inject("") { |s,d| "#{s}#{d}"}
+      def permutation(count)
+        base = [*0..@num_digits-1]
+        do_permutations(base, count)
       end
       
-      def permutation(count)
-        return "" if count >= factorial(@num_digits)
-        
+      def do_permutations(base, count)
         result = ""
-        base = [*0..@num_digits-1]
-        while (base.size > 0)
+        if base.length > 0 && count < factorial(base.length)
           num_possible = factorial(base.size-1)
           index = count / num_possible
           count = count % num_possible
-          
-          result = "#{result}#{base[index]}"
-          base.delete_at(index)
+          c = base.delete_at(index)
+          result = "#{c}#{do_permutations(base, count)}"
         end
         result
       end
