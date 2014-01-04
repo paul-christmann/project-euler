@@ -26,7 +26,7 @@ module Util
       when 'ssh' then 22
       when 'http' then 80
       when 'https' then 443
-      else 0
+      else nil
     end
   end
   
