@@ -40,6 +40,10 @@ module Util
         end
       end
     end
+    # For compatibility with Ruby URI class
+    def scheme
+      self.protocol
+    end
     def query
       params = {}
       self.query_string.gsub(/\?/,'').split('&').each do |param|

@@ -4,10 +4,11 @@ require 'net/http'
 
 include Util
 describe UrlParser do
-  def validate_url(url, port, host, path)
+  def validate_url(url, port, host, path, protocol)
     url.port.should == port
     url.host.should == host
     url.path.should == path
+    url.scheme.should == protocol
   end
   
   describe 'base http urls' do
@@ -16,11 +17,10 @@ describe UrlParser do
     end
     it 'should be parsed by URL Parser' do
       url = UrlParser.parse(@url_string)
-      validate_url(url, 80, 'www.espn.com', '')
-      url.protocol.should == 'http'
+      validate_url(url, 80, 'www.espn.com', '', 'http')
     end
     it 'should be parsed by Ruby URL' do
-      validate_url(URI.parse(@url_string), 80, 'www.espn.com', '')
+      validate_url(URI.parse(@url_string), 80, 'www.espn.com', '', 'http')
     end
   end
   
@@ -30,11 +30,10 @@ describe UrlParser do
     end
     it 'should be parsed by URL Parser' do
       url = UrlParser.parse(@url_string)
-      validate_url(url, 80, 'www.espn.com', '/')
-      url.protocol.should == 'http'
+      validate_url(url, 80, 'www.espn.com', '/', 'http')
     end
     it 'should be parsed by Ruby URL' do
-      validate_url(URI.parse(@url_string), 80, 'www.espn.com', '/')
+      validate_url(URI.parse(@url_string), 80, 'www.espn.com', '/', 'http')
     end
   end
   
@@ -44,11 +43,10 @@ describe UrlParser do
     end
     it 'should be parsed by URL Parser' do
       url = UrlParser.parse(@url_string)
-      validate_url(url, 80, 'www.espn.com', '/sports/')
-      url.protocol.should == 'http'
+      validate_url(url, 80, 'www.espn.com', '/sports/', 'http')
     end
     it 'should be parsed by Ruby URL' do
-      validate_url(URI.parse(@url_string), 80, 'www.espn.com', '/sports/')
+      validate_url(URI.parse(@url_string), 80, 'www.espn.com', '/sports/', 'http')
     end
   end
   
@@ -58,11 +56,11 @@ describe UrlParser do
     end
     it 'should be parsed by URL Parser' do
       url = UrlParser.parse(@url_string)
-      validate_url(url, 442, 'www.espn.com', '/sports/')
-      url.protocol.should == 'https'
+      validate_url(url, 442, 'www.espn.com', '/sports/', 'https')
     end
     it 'should be parsed by Ruby URL' do
-      validate_url(URI.parse(@url_string), 442, 'www.espn.com', '/sports/')
+      url = URI.parse(@url_string)
+      validate_url(url, 442, 'www.espn.com', '/sports/', 'https')
     end
   end
 
@@ -72,12 +70,11 @@ describe UrlParser do
     end
     it 'should be parsed by URL Parser' do
       url = UrlParser.parse(@url_string)
-      validate_url(url, 80, 'www.espn.com', '')
-      url.protocol.should == 'http'
+      validate_url(url, 80, 'www.espn.com', '', 'http')
     end
     it 'should be parsed by Ruby URL' do
       # URI does not parse this.
-      validate_url(URI.parse(@url_string), nil, nil, 'www.espn.com')
+      validate_url(URI.parse(@url_string), nil, nil, 'www.espn.com', nil)
     end
   end
   
@@ -87,12 +84,10 @@ describe UrlParser do
     end
     it 'should be parsed by URL Parser' do
       url = UrlParser.parse(@url_string)
-      validate_url(url, 80, 'www.espn.com', '/sports/basketball/')
-      url.protocol.should == 'http'
+      validate_url(url, 80, 'www.espn.com', '/sports/basketball/', 'http')
     end
     it 'should be parsed by Ruby URL' do
-      # URI does not parse this.
-      validate_url(URI.parse(@url_string), 80, 'www.espn.com', '/sports/basketball/')
+      validate_url(URI.parse(@url_string), 80, 'www.espn.com', '/sports/basketball/', 'http')
     end
   end
 
@@ -102,12 +97,10 @@ describe UrlParser do
     end
     it 'should be parsed by URL Parser' do
       url = UrlParser.parse(@url_string)
-      validate_url(url, 80, 'www.es-pn.com', '/sports/basketball/')
-      url.protocol.should == 'http'
+      validate_url(url, 80, 'www.es-pn.com', '/sports/basketball/', 'http')
     end
     it 'should be parsed by Ruby URL' do
-      # URI does not parse this.
-      validate_url(URI.parse(@url_string), 80, 'www.es-pn.com', '/sports/basketball/')
+      validate_url(URI.parse(@url_string), 80, 'www.es-pn.com', '/sports/basketball/', 'http')
     end
   end
   
@@ -117,12 +110,10 @@ describe UrlParser do
     end
     it 'should be parsed by URL Parser' do
       url = UrlParser.parse(@url_string)
-      validate_url(url, 80, '10.1.2.3', '/sports/basketball/')
-      url.protocol.should == 'http'
+      validate_url(url, 80, '10.1.2.3', '/sports/basketball/', 'http')
     end
     it 'should be parsed by Ruby URL' do
-      # URI does not parse this.
-      validate_url(URI.parse(@url_string), 80, '10.1.2.3', '/sports/basketball/')
+      validate_url(URI.parse(@url_string), 80, '10.1.2.3', '/sports/basketball/', 'http')
     end
   end
 
@@ -132,12 +123,11 @@ describe UrlParser do
     end
     it 'should be parsed by URL Parser' do
       url = UrlParser.parse(@url_string)
-      validate_url(url, 0, 'Users', '/pchristmann/.bash_profile')
-      url.protocol.should == 'file'
+      validate_url(url, 0, 'Users', '/pchristmann/.bash_profile', 'file')
     end
     it 'should be parsed by Ruby URL' do
       # URI does not parse this.
-      validate_url(URI.parse(@url_string), nil, 'Users', '/pchristmann/.bash_profile')
+      validate_url(URI.parse(@url_string), nil, 'Users', '/pchristmann/.bash_profile', 'file')
     end
   end
 
