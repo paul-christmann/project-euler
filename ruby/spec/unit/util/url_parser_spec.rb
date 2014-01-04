@@ -9,6 +9,9 @@ describe UrlParser do
     url.host.should == expectation[:host]
     url.path.should == expectation[:path]
     url.scheme.should == expectation[:protocol]
+    if expectation[:query_string]
+      url.query.should == expectation[:query_string]
+    end
   end
   
   describe 'base http urls' do
@@ -129,56 +132,96 @@ describe UrlParser do
       validate_url(URI.parse(@url_string), @expectation)
     end
   end
-
-  describe 'URL Parser calculate urls' do
-    it 'should capture query params' do
-      url = UrlParser.parse('www.espn.com/sports?type=basketball')
-      
-      url.port.should == 80
-      url.host.should == 'www.espn.com'
-      url.protocol.should == 'http'
-      url.path.should == '/sports'
-      url.query_string.should == '?type=basketball'
-      url.query.length.should == 1
-      url.query['type'].should == 'basketball'
+  
+  describe 'query parameters' do
+    before (:all) do
+      @url_string = 'http://www.espn.com/sports?type=basketball'
+      @expectation = {:port => 80, :host => 'www.espn.com', :path => '/sports', :protocol => 'http', :query_string => 'type=basketball'}
+    end
+    it 'should be parsed by URL Parser' do
+      url = UrlParser.parse(@url_string)
+      validate_url(url, @expectation)
+      url.query_params.length.should == 1
+      url.query_params['type'].should == 'basketball'
       
     end
-    it 'should capture query params without path' do
-      url = UrlParser.parse('www.espn.com?type=basketball&path=sports')
-      
-      url.port.should == 80
-      url.host.should == 'www.espn.com'
-      url.protocol.should == 'http'
-      url.path.should == ''
-      url.query.length.should == 2
-      url.query['type'].should == 'basketball'
-      url.query['path'].should == 'sports'
-      
+    it 'should be parsed by Ruby URL' do
+      url = URI.parse(@url_string)
+      validate_url(url, @expectation)
     end
-    it 'should capture query params with path only' do
-      url = UrlParser.parse('www.espn.com/?type=basketball&path=sports')
-      
-      url.port.should == 80
-      url.host.should == 'www.espn.com'
-      url.protocol.should == 'http'
-      url.path.should == '/'
-      url.query.length.should == 2
-      url.query['type'].should == 'basketball'
-      url.query['path'].should == 'sports'
-      
-    end  
-    it 'should capture full url' do
-      url = UrlParser.parse('http://www.espn.com:442/sports/?type=basketball&path=sports&path=foo')
-      
-      url.port.should == 442
-      url.host.should == 'www.espn.com'
-      url.protocol.should == 'http'
-      url.path.should == '/sports/'
-      url.query.length.should == 2
-      url.query['type'].should == 'basketball'
-      url.query['path'].should == 'foo'
-      
-    end  
   end
 
+  describe 'query parameters without path' do
+    before (:all) do
+      @url_string = 'http://www.espn.com?type=basketball'
+      @expectation = {:port => 80, :host => 'www.espn.com', :path => '', :protocol => 'http', :query_string => 'type=basketball'}
+    end
+    it 'should be parsed by URL Parser' do
+      url = UrlParser.parse(@url_string)
+      validate_url(url, @expectation)
+      url.query_params.length.should == 1
+      url.query_params['type'].should == 'basketball'
+      
+    end
+    it 'should be parsed by Ruby URL' do
+      url = URI.parse(@url_string)
+      validate_url(url, @expectation)
+    end
+  end
+
+  describe 'query parameters with slash-only path path' do
+    before (:all) do
+      @url_string = 'http://www.espn.com/?type=basketball'
+      @expectation = {:port => 80, :host => 'www.espn.com', :path => '/', :protocol => 'http', :query_string => 'type=basketball'}
+    end
+    it 'should be parsed by URL Parser' do
+      url = UrlParser.parse(@url_string)
+      validate_url(url, @expectation)
+      url.query_params.length.should == 1
+      url.query_params['type'].should == 'basketball'
+      
+    end
+    it 'should be parsed by Ruby URL' do
+      url = URI.parse(@url_string)
+      validate_url(url, @expectation)
+    end
+  end
+  
+  describe 'multiple query parameters' do
+    before (:all) do
+      @url_string = 'http://www.espn.com/?type=basketball&path=sports'
+      @expectation = {:port => 80, :host => 'www.espn.com', :path => '/', :protocol => 'http', :query_string => 'type=basketball&path=sports'}
+    end
+    it 'should be parsed by URL Parser' do
+      url = UrlParser.parse(@url_string)
+      validate_url(url, @expectation)
+      url.query_params.length.should == 2
+      url.query_params['type'].should == 'basketball'
+      url.query_params['path'].should == 'sports'
+      
+    end
+    it 'should be parsed by Ruby URL' do
+      url = URI.parse(@url_string)
+      validate_url(url, @expectation)
+    end
+  end
+
+  describe 'repeated query parameters' do
+    before (:all) do
+      @url_string = 'http://www.espn.com/?type=basketball&path=sports&path=foo'
+      @expectation = {:port => 80, :host => 'www.espn.com', :path => '/', :protocol => 'http', :query_string => 'type=basketball&path=sports&path=foo'}
+    end
+    it 'should be parsed by URL Parser' do
+      url = UrlParser.parse(@url_string)
+      validate_url(url, @expectation)
+      url.query_params.length.should == 2
+      url.query_params['type'].should == 'basketball'
+      url.query_params['path'].should == 'foo'
+      
+    end
+    it 'should be parsed by Ruby URL' do
+      url = URI.parse(@url_string)
+      validate_url(url, @expectation)
+    end
+  end
 end

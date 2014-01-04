@@ -14,7 +14,7 @@ module Util
       arg_hash[:protocol]     = ( parts[0] ? parts[0].gsub(/:/,'').downcase : 'http')
       arg_hash[:port]         = ( parts[3] ? parts[3].gsub(/:/,'').to_i : UrlParser.port_for(arg_hash[:protocol]) )
       arg_hash[:path]         = ( parts[4] ? parts[4].downcase : '' )
-      arg_hash[:query_string] = ( parts[5] ? parts[5].downcase : '')
+      arg_hash[:query_string] = ( parts[5] ? parts[5].downcase : '').gsub(/^\?/,'')
       
       MyUrl.new(arg_hash)
     end
@@ -44,7 +44,11 @@ module Util
     def scheme
       self.protocol
     end
+    # For compatibility with Ruby URI class, query should return the query_string
     def query
+      self.query_string
+    end
+    def query_params
       params = {}
       self.query_string.gsub(/\?/,'').split('&').each do |param|
         k,v = param.split('=')
