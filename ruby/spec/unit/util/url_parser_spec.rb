@@ -4,79 +4,144 @@ require 'net/http'
 
 include Util
 describe UrlParser do
-  describe 'URL Parser calculate urls' do
-    it 'should handle base url' do
-      url = UrlParser.parse('http://www.espn.com')
-      
-      url.port.should == 80
-      url.host.should == 'www.espn.com'
-      url.protocol.should == 'http'
-      url.path.should == ''
-      
+  def validate_url(url, port, host, path)
+    url.port.should == port
+    url.host.should == host
+    url.path.should == path
+  end
+  
+  describe 'base http urls' do
+    before (:all) do
+      @url_string = 'http://www.espn.com'
     end
-    it 'should handle base url with trailing slash' do
-      url = UrlParser.parse('http://www.espn.com/')
-      
-      url.port.should == 80
-      url.host.should == 'www.espn.com'
+    it 'should be parsed by URL Parser' do
+      url = UrlParser.parse(@url_string)
+      validate_url(url, 80, 'www.espn.com', '')
       url.protocol.should == 'http'
-      url.path.should == '/'
-      
     end
-    it 'should handle base url with trailing slash in path' do
-      url = UrlParser.parse('http://www.espn.com/sports/')
-      
-      url.port.should == 80
-      url.host.should == 'www.espn.com'
+    it 'should be parsed by Ruby URL' do
+      validate_url(URI.parse(@url_string), 80, 'www.espn.com', '')
+    end
+  end
+  
+  describe 'base http urls with trailing slash' do
+    before (:all) do
+      @url_string = 'http://www.espn.com/'
+    end
+    it 'should be parsed by URL Parser' do
+      url = UrlParser.parse(@url_string)
+      validate_url(url, 80, 'www.espn.com', '/')
       url.protocol.should == 'http'
-      url.path.should == '/sports/'
-      
     end
-    it 'should handle base url with wrong port' do
-      url = UrlParser.parse('https://www.espn.com:80')
-      
-      url.port.should == 80
-      url.host.should == 'www.espn.com'
+    it 'should be parsed by Ruby URL' do
+      validate_url(URI.parse(@url_string), 80, 'www.espn.com', '/')
+    end
+  end
+  
+  describe 'http url with trailing slash in path' do
+    before (:all) do
+      @url_string = 'http://www.espn.com/sports/'
+    end
+    it 'should be parsed by URL Parser' do
+      url = UrlParser.parse(@url_string)
+      validate_url(url, 80, 'www.espn.com', '/sports/')
+      url.protocol.should == 'http'
+    end
+    it 'should be parsed by Ruby URL' do
+      validate_url(URI.parse(@url_string), 80, 'www.espn.com', '/sports/')
+    end
+  end
+  
+  describe 'https url with explicit port' do
+    before (:all) do
+      @url_string = 'https://www.espn.com:442/sports/'
+    end
+    it 'should be parsed by URL Parser' do
+      url = UrlParser.parse(@url_string)
+      validate_url(url, 442, 'www.espn.com', '/sports/')
       url.protocol.should == 'https'
-      url.path.should == ''
-      
     end
-    it 'should handle base no protocol' do
-      url = UrlParser.parse('www.espn.com')
-      
-      url.port.should == 80
-      url.host.should == 'www.espn.com'
+    it 'should be parsed by Ruby URL' do
+      validate_url(URI.parse(@url_string), 442, 'www.espn.com', '/sports/')
+    end
+  end
+
+  describe 'url with no protocol' do
+    before (:all) do
+      @url_string = 'www.espn.com'
+    end
+    it 'should be parsed by URL Parser' do
+      url = UrlParser.parse(@url_string)
+      validate_url(url, 80, 'www.espn.com', '')
       url.protocol.should == 'http'
-      url.path.should == ''
-      
     end
-    it 'should capture path' do
-      url = UrlParser.parse('www.espn.com/sports')
-      
-      url.port.should == 80
-      url.host.should == 'www.espn.com'
+    it 'should be parsed by Ruby URL' do
+      # URI does not parse this.
+      validate_url(URI.parse(@url_string), nil, nil, 'www.espn.com')
+    end
+  end
+  
+  describe 'url with path' do
+    before (:all) do
+      @url_string = 'http://www.espn.com/sports/basketball/'
+    end
+    it 'should be parsed by URL Parser' do
+      url = UrlParser.parse(@url_string)
+      validate_url(url, 80, 'www.espn.com', '/sports/basketball/')
       url.protocol.should == 'http'
-      url.path.should == '/sports'
-      
     end
-    it 'should capture multi-part path' do
-      url = UrlParser.parse('www.espn.com/sports/basketball')
-      
-      url.port.should == 80
-      url.host.should == 'www.espn.com'
+    it 'should be parsed by Ruby URL' do
+      # URI does not parse this.
+      validate_url(URI.parse(@url_string), 80, 'www.espn.com', '/sports/basketball/')
+    end
+  end
+
+  describe 'url with hostname with dash' do
+    before (:all) do
+      @url_string = 'http://www.es-pn.com/sports/basketball/'
+    end
+    it 'should be parsed by URL Parser' do
+      url = UrlParser.parse(@url_string)
+      validate_url(url, 80, 'www.es-pn.com', '/sports/basketball/')
       url.protocol.should == 'http'
-      url.path.should == '/sports/basketball'
-      
     end
-    it 'should capture multi-part path with trailing slash' do
-      url = UrlParser.parse('www.espn.com/sports/basketball/')
-      
-      url.port.should == 80
-      url.host.should == 'www.espn.com'
+    it 'should be parsed by Ruby URL' do
+      # URI does not parse this.
+      validate_url(URI.parse(@url_string), 80, 'www.es-pn.com', '/sports/basketball/')
+    end
+  end
+  
+  describe 'url with IP Address' do
+    before (:all) do
+      @url_string = 'http://10.1.2.3/sports/basketball/'
+    end
+    it 'should be parsed by URL Parser' do
+      url = UrlParser.parse(@url_string)
+      validate_url(url, 80, '10.1.2.3', '/sports/basketball/')
       url.protocol.should == 'http'
-      url.path.should == '/sports/basketball/'
-      
     end
+    it 'should be parsed by Ruby URL' do
+      # URI does not parse this.
+      validate_url(URI.parse(@url_string), 80, '10.1.2.3', '/sports/basketball/')
+    end
+  end
+
+  describe 'file protocol' do
+    before (:all) do
+      @url_string = 'file://Users/pchristmann/.bash_profile'
+    end
+    it 'should be parsed by URL Parser' do
+      url = UrlParser.parse(@url_string)
+      validate_url(url, 0, 'Users', '/pchristmann/.bash_profile')
+      url.protocol.should == 'file'
+    end
+    it 'should be parsed by Ruby URL' do
+      # URI does not parse this.
+      validate_url(URI.parse(@url_string), nil, 'Users', '/pchristmann/.bash_profile')
+    end
+  end
+
+  describe 'URL Parser calculate urls' do
     it 'should capture query params' do
       url = UrlParser.parse('www.espn.com/sports?type=basketball')
       
@@ -125,41 +190,6 @@ describe UrlParser do
       url.query['path'].should == 'foo'
       
     end  
-  end
-
-  describe 'Ruby URL calculate urls' do
-    it 'should handle base url' do
-      url = URI.parse('http://www.espn.com')
-      
-      url.port.should == 80
-      url.host.should == 'www.espn.com'
-      url.path.should == ''
-      
-    end
-    it 'should handle base url with slash' do
-      url = URI.parse('http://www.espn.com/')
-      
-      url.port.should == 80
-      url.host.should == 'www.espn.com'
-      url.path.should == '/'
-      
-    end
-    it 'should handle path' do
-      url = URI.parse('http://www.espn.com/sports')
-      
-      url.port.should == 80
-      url.host.should == 'www.espn.com'
-      url.path.should == '/sports'
-      
-    end
-    it 'should handle path with trailing slash' do
-      url = URI.parse('http://www.espn.com/sports/')
-      
-      url.port.should == 80
-      url.host.should == 'www.espn.com'
-      url.path.should == '/sports/'
-      
-    end
   end
 
 end

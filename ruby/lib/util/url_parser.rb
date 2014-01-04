@@ -1,7 +1,7 @@
 module Util
   class UrlParser
 
-    URL_REGEX = /([a-z]+:)?(\/\/)?([a-z\.]+)(\:[\d]+)?(\/[^?]*)?([\?].*)?/i
+    URL_REGEX = /([a-z]+:)?(\/\/)?([^?\/\:]+)(\:[\d]+)?(\/[^?]*)?([\?].*)?/i
     def self.parse(input)
       parsed = input.scan(URL_REGEX)
       raise "Unexpected URL Input: #{input}" unless parsed.length == 1 
@@ -9,7 +9,7 @@ module Util
       raise "Unexpected URL Input: #{input} (#{parts})" unless parts.length == 6
       
       arg_hash = {}
-      arg_hash[:host] = parts[2].downcase
+      arg_hash[:host] = parts[2]
 
       arg_hash[:protocol]     = ( parts[0] ? parts[0].gsub(/:/,'').downcase : 'http')
       arg_hash[:port]         = ( parts[3] ? parts[3].gsub(/:/,'').to_i : UrlParser.port_for(arg_hash[:protocol]) )
