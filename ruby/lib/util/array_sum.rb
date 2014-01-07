@@ -21,7 +21,7 @@ module Util
     
     def zero_sum_elements
       
-      return [] if (self.pos_array.empty? || self.neg_array.empty?) && self.zero_array.length < 3\
+      return [] if (self.pos_array.empty? || self.neg_array.empty?) && self.zero_array.length < 3
       
       return [0,0,0] if self.zero_array.length >= 3
       
