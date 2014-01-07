@@ -11,42 +11,43 @@ module Util
       self.neg_array, self.pos_array = array.partition{|x| x < 0}
 
       self.pos_array, self.zero_array = self.pos_array.partition{|x| x>0}
+      
+      # self.neg_array = self.neg_array.sort.uniq
+      # self.pos_array = self.pos_array.sort.uniq
+
+      puts "Starting test with #{self.pos_array.length} pos, #{self.neg_array.length} neg, #{self.zero_array.length} zero, #{self.array_hash.size} total"
+
     end
     
-    def has_zero_sum
+    def zero_sum_elements
       
-      return false if (self.pos_array.empty? || self.neg_array.empty?) && self.zero_array.length < 3
-      return true if self.zero_array.length >= 3
+      return [] if (self.pos_array.empty? || self.neg_array.empty?) && self.zero_array.length < 3\
+      
+      return [0,0,0] if self.zero_array.length >= 3
+      
       if self.zero_array.any?
         # look for complements in pos_array and neg_array
         self.neg_array.each do |i|
-          return true if self.array_hash[-1 * i]
+          return [0, i, -1 * i] if self.array_hash[-1 * i]
         end
-      end
-      new_neg_array = []
-      self.neg_array.each_with_index do |i, idx|
-        self.neg_array.each_with_index do |j, jdx|
-          next if idx == jdx
-          new_neg_array << (i+j)
-        end
-      end
-      new_neg_array.uniq!
-      new_neg_array.each do |i|
-        return true if self.array_hash[-i]
       end
       
-      new_pos_array = []
-      self.pos_array.each_with_index do |i, idx|
-        self.pos_array.each_with_index do |j, jdx|
-          next if idx == jdx
-          new_pos_array << (i+j)
+      self.neg_array[0..self.neg_array.length-1].each_with_index do |i, idx|
+        self.neg_array[(idx+1)..self.neg_array.length-1].each do |j|
+          return [i, j, -1 * (i+j)] if self.array_hash[-1*(i+j)]
         end
       end
-      new_pos_array.uniq!
-      new_pos_array.each do |i|
-        return true if self.array_hash[-i]
+      
+      self.pos_array[0..self.pos_array.length-1].each_with_index do |i, idx|
+        self.pos_array[(idx+1)..self.pos_array.length-1].each do |j|
+          return [i, j, -1 * (i+j)] if self.array_hash[-1*(i+j)]
+        end
       end
-      false
+      []
+    end
+
+    def has_zero_sum
+      zero_sum_elements.any?
     end
   end
 end
